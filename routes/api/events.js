@@ -144,15 +144,12 @@ router.post(
     ]
   ],
   async (req, res) => {
-   
-   
-
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
-  
+
       const user = await User.findById(req.user.id).select("-password");
       const event = await Event.findById(req.params.id);
       if (event.vendor.toString() !== req.user.id) {
@@ -172,4 +169,23 @@ router.post(
     }
   }
 );
+
+// @route   PUT api/events/status/:id
+// @desc    Approve a status
+// @access  Private
+
+router.put("/status/:id", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (event.vendor.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+    event.status = !event.status;
+    await event.save();
+    res.json(event);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("SERVER ERROR");
+  }
+});
 module.exports = router;
