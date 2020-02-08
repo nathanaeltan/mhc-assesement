@@ -36,10 +36,14 @@ router.post(
         event_name: req.body.event_name,
         location: req.body.location,
         vendor_name: vendor.name,
-        company_name: user.name
+        company_name: user.name,
+        user: user.id,
+        vendor: vendor.id
       });
 
-      newEvent.proposed_dates = req.body.proposed_dates.split(",").map(date => date.trim());
+      newEvent.proposed_dates = req.body.proposed_dates
+        .split(",")
+        .map(date => date.trim());
 
       const event = await newEvent.save();
       res.json(event);
@@ -50,4 +54,122 @@ router.post(
   }
 );
 
+// @route   GET api/events
+// @desc    See all Events from HR side
+// @access  Private
+
+router.get("/", auth, async (req, res) => {
+  try {
+    const events = await Event.find({ user: req.user.id }).sort({ date: -1 });
+    res.json(events);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("SERVER ERROR");
+  }
+});
+
+// @route   GET api/events/vendor
+// @desc    See all Events from Vendor Side
+// @access  Private
+router.get("/vendor", auth, async (req, res) => {
+  try {
+    const events = await Event.find({ vendor: req.user.id }).sort({ date: -1 });
+    res.json(events);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("SERVER ERROR");
+  }
+});
+
+// @route   GET api/events/:id
+// @desc    Get event by ID
+// @access  Private
+
+router.get("/:id", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ msg: "Event not found" });
+    }
+
+    res.json(event);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Event not found" });
+    }
+    res.status(500).send("SERVER ERROR");
+  }
+});
+
+// @route   DELETE api/events/:id
+// @desc    Delete Event
+// @access  Private
+
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    // Check if user owns event
+
+    if (!event) {
+      return res.status(404).json({ msg: "Event not found" });
+    }
+    if (event.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+    await event.remove();
+
+    res.json({ msg: "Event Deleted" });
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Event not found" });
+    }
+    res.status(500).send("SERVER ERROR");
+  }
+});
+
+// @route   POST api/events/remarks/:id
+// @desc    Leave remark on Event
+// @access  Private
+router.post(
+  "/remarks/:id",
+  [
+    auth,
+    [
+      check("text", "Text is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+   
+   
+
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+  
+      const user = await User.findById(req.user.id).select("-password");
+      const event = await Event.findById(req.params.id);
+      if (event.vendor.toString() !== req.user.id) {
+        return res.status(401).json({ msg: "User not authorized" });
+      }
+      const newRemark = {
+        text: req.body.text,
+        name: user.name
+      };
+      event.remarks.unshift(newRemark);
+
+      await event.save();
+      res.json(event.remarks);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("SERVER ERROR");
+    }
+  }
+);
 module.exports = router;
