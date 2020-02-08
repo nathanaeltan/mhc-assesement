@@ -15,8 +15,9 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   vendor: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false,
+    required: true
   },
   date: {
     type: Date,
