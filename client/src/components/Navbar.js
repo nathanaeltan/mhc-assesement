@@ -13,7 +13,7 @@ const Navbar = ({ auth: { isAuthenticated, loading } }) => {
       <Button color="inherit" component={Link} to="/">
         Home
       </Button>
-      <Button color="inherit" component={Link} to="/dashboard">
+      <Button color="inherit" component={Link} to="/events">
         Dashboard
       </Button>
     </Fragment>

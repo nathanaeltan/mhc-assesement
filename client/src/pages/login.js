@@ -1,5 +1,4 @@
-import React, { Component, useState } from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
@@ -9,7 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { setAlert } from "../actions/alert";
-import axios from "axios";
+
 import { login } from "../actions/auth";
 const styles = {
   form: {
@@ -41,7 +40,7 @@ const Login = ({ login, isAuthenticated }) => {
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/events" />;
   }
   return (
     <Grid container style={styles.form}>
