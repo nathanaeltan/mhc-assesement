@@ -7,4 +7,5 @@ export const AUTH_ERROR = "AUTH_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const GET_EVENTS = "GET_EVENTS";
+export const GET_EVENT = "GET_EVENT";
 export const EVENT_ERROR = "EVENT_ERROR";

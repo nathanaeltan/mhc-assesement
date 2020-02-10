@@ -12,6 +12,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { getEvents } from "../actions/event";
 import Button from "@material-ui/core/Button";
+import ViewEvent from "./ViewEvent";
 
 const useStyles = makeStyles({
   table: {
@@ -19,8 +20,8 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(event_name, location, vendor_name, status, date) {
-  return { event_name, location, vendor_name, status, date };
+function createData(event_name, location, vendor_name, status, date, _id) {
+  return { event_name, location, vendor_name, status, date, _id };
 }
 
 const Events = ({ getEvents, event: { events, loading } }) => {
@@ -34,7 +35,6 @@ const Events = ({ getEvents, event: { events, loading } }) => {
     return createData(event_name, location, vendor_name, status, date, _id);
   });
 
-  console.log(rows);
 
   return loading ? (
     <Spinner />
@@ -69,9 +69,7 @@ const Events = ({ getEvents, event: { events, loading } }) => {
                 </TableCell>
                 <TableCell>{row.date}</TableCell>
                 <TableCell>
-                  <Button type="submit" variant="contained" color="primary">
-                    View
-                  </Button>
+                  <ViewEvent eventID={row._id} />
                 </TableCell>
               </TableRow>
             ))}
