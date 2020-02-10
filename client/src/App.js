@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 // Components
 import Navbar from "./components/Navbar";
@@ -10,6 +10,12 @@ import home from "./pages/home";
 import login from "./pages/login";
 import signup from "./pages/signup";
 import dashboard from "./pages/dashboard";
+
+// Redux
+import { Provider } from "react-redux";
+import store from "./store";
+import { loadUser } from "./actions/auth";
+import setAuthToken from "./utils/setAuthToken";
 
 const theme = createMuiTheme({
   palette: {
@@ -27,9 +33,16 @@ const theme = createMuiTheme({
     }
   }
 });
-class App extends Component {
-  render() {
-    return (
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser);
+  }, []);
+  return (
+    <Provider store={store}>
       <MuiThemeProvider theme={theme}>
         <div className="App">
           <Router>
@@ -45,8 +58,8 @@ class App extends Component {
           </Router>
         </div>
       </MuiThemeProvider>
-    );
-  }
-}
+    </Provider>
+  );
+};
 
 export default App;

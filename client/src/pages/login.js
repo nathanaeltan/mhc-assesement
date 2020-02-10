@@ -1,57 +1,98 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 // MUI
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import Buttom from "@material-ui/core/Button"
+import Button from "@material-ui/core/Button";
+import { connect } from "react-redux";
+import { setAlert } from "../actions/alert";
+import axios from "axios";
+import { login } from "../actions/auth";
 const styles = {
   form: {
     textAlign: "center"
+  },
+  pageTitle: {
+    marginTop: "30px"
+  },
+  textField: {
+    margin: "10px"
   }
 };
 
-class login extends Component {
-    constructor(){
-        super();
-        this.state= {
-            email: "",
-            password: "",
-            loading: false
-        }
-    }
-     handleSubmit = e => {
-        console.log("SUBMIT");
-      };
-      
-     handleChange = e => {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-  render() {
-    const { classes } = this.props;
-    return (
-      <Grid container className={classes.form}>
-        <Grid item sm />
-        <Grid item sm>
-          <Typography variant="h2" className={classes.pageTitle}>
-            Login
-          </Typography>
-          <form noValidate onSubmit={this.handleSubmit}>
-              <TextField id="email" name="email" type="email" label="Email" className={classes.textField} value={this.state.email} onChange={this.handleChange} fullWidth/>
-              <TextField id="password" name="password" type="password" label="Password" className={classes.textField} value={this.state.password} onChange={this.handleChange} fullWidth/>
-          </form>
-        </Grid>
-        <Grid item sm />
+const Login = ({ login, isAuthenticated }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const { email, password } = formData;
+  // const { classes } = this.props;
+
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
+    e.preventDefault();
+    login(email, password);
+  };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
+  return (
+    <Grid container style={styles.form}>
+      <Grid item sm />
+      <Grid item sm>
+        <Typography variant="h2" style={styles.pageTitle}>
+          Login
+        </Typography>
+        <form noValidate onSubmit={e => onSubmit(e)}>
+          <TextField
+            id="email"
+            name="email"
+            type="email"
+            label="Email"
+            style={styles.textField}
+            value={email}
+            onChange={e => onChange(e)}
+            fullWidth
+          />
+          <TextField
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+            style={styles.textField}
+            value={password}
+            onChange={e => onChange(e)}
+            fullWidth
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={styles.button}
+          >
+            Submit
+          </Button>
+        </form>
       </Grid>
-    );
-  }
-}
-
-login.propTypes = {
-  classes: PropTypes.object.isRequired
+      <Grid item sm />
+    </Grid>
+  );
 };
 
-export default withStyles(styles)(login);
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { login })(Login);
