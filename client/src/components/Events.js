@@ -11,7 +11,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { getEvents } from "../actions/event";
-import Button from "@material-ui/core/Button";
 import ViewEvent from "./ViewEvent";
 
 const useStyles = makeStyles({
@@ -24,18 +23,32 @@ function createData(event_name, location, vendor_name, status, date, _id) {
   return { event_name, location, vendor_name, status, date, _id };
 }
 
-const Events = ({ getEvents, event: { events, loading } }) => {
+const Events = ({ getEvents, event: { events, loading }, user }) => {
   useEffect(() => {
     getEvents();
   }, [getEvents]);
   const classes = useStyles();
 
   const rows = events.map(event => {
-    const { event_name, location, vendor_name, status, date, _id } = event;
-    return createData(event_name, location, vendor_name, status, date, _id);
+    const {
+      event_name,
+      location,
+      vendor_name,
+      status,
+      date,
+      _id,
+      company_name
+    } = event;
+    return createData(
+      event_name,
+      location,
+      vendor_name,
+      status,
+      date,
+      _id,
+      company_name
+    );
   });
-
-
   return loading ? (
     <Spinner />
   ) : (
@@ -50,7 +63,13 @@ const Events = ({ getEvents, event: { events, loading } }) => {
             <TableRow>
               <TableCell>Event Name</TableCell>
               <TableCell>Location</TableCell>
-              <TableCell>Vendor</TableCell>
+              <TableCell>
+                {user !== null && !loading
+                  ? user.vendor
+                    ? "Company"
+                    : "Vendor"
+                  : null}
+              </TableCell>
               <TableCell>Approved </TableCell>
               <TableCell>Date Created</TableCell>
               <TableCell></TableCell>
@@ -63,7 +82,13 @@ const Events = ({ getEvents, event: { events, loading } }) => {
                   {row.event_name}
                 </TableCell>
                 <TableCell>{row.location}</TableCell>
-                <TableCell>{row.vendor_name}</TableCell>
+                <TableCell>
+                  {user !== null && !loading
+                    ? user.vendor
+                      ? row.company_name
+                      : row.vendor_name
+                    : null}
+                </TableCell>
                 <TableCell>
                   {row.status ? "Approved" : "Not Approved"}
                 </TableCell>
@@ -86,7 +111,8 @@ Events.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  event: state.event
+  event: state.event,
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, { getEvents })(Events);
