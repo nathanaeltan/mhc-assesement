@@ -19,8 +19,16 @@ const useStyles = makeStyles({
   }
 });
 
-function createData(event_name, location, vendor_name, status, date, _id) {
-  return { event_name, location, vendor_name, status, date, _id };
+function createData(
+  event_name,
+  location,
+  vendor_name,
+  status,
+  date,
+  _id,
+  company_name
+) {
+  return { event_name, location, vendor_name, status, date, _id, company_name };
 }
 
 const Events = ({ getEvents, event: { events, loading }, user }) => {
@@ -64,11 +72,7 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
               <TableCell>Event Name</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>
-                {user !== null && !loading
-                  ? user.vendor
-                    ? "Company"
-                    : "Vendor"
-                  : null}
+                {user !== null ? (user.vendor ? "Company" : "Vendor") : null}
               </TableCell>
               <TableCell>Approved </TableCell>
               <TableCell>Date Created</TableCell>
@@ -83,11 +87,8 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
                 </TableCell>
                 <TableCell>{row.location}</TableCell>
                 <TableCell>
-                  {user !== null && !loading
-                    ? user.vendor
-                      ? row.company_name
-                      : row.vendor_name
-                    : null}
+                  {" "}
+                  {user !== null ? (!user.vendor ? row.vendor_name : row.company_name) : null}
                 </TableCell>
                 <TableCell>
                   {row.status ? "Approved" : "Not Approved"}
