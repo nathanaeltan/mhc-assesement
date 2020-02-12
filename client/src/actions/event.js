@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAlert } from "./alert";
+// import { setAlert } from "./alert";
 import { GET_EVENTS, EVENT_ERROR, GET_EVENT } from "./types";
 
 // GET EVENTS
@@ -13,8 +13,8 @@ export const getEvents = () => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: EVENT_ERROR
-      // payload: { msg: res.statusText, status: err.response.status }
+      type: EVENT_ERROR,
+      payload: { msg: err.res.statusText, status: err.response.status }
     });
   }
 };
@@ -30,8 +30,8 @@ export const getEvent = id => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: EVENT_ERROR
-      // payload: { msg: res.statusText, status: err.response.status }
+      type: EVENT_ERROR,
+      payload: { msg: err.res.statusText, status: err.response.status }
     });
   }
 };

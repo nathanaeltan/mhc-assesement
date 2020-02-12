@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -24,7 +24,6 @@ const Navbar = ({ auth: { isAuthenticated, loading } }) => {
       <Button color="inherit" component={Link} to="/login">
         Login
       </Button>
-     
     </Fragment>
   );
 
@@ -32,7 +31,9 @@ const Navbar = ({ auth: { isAuthenticated, loading } }) => {
     <AppBar>
       <Toolbar className="nav-container">
         {!loading && (
-          <Fragment>{isAuthenticated && !loading ? authLinks : guestLinks}</Fragment>
+          <Fragment>
+            {isAuthenticated && !loading ? authLinks : guestLinks}
+          </Fragment>
         )}
       </Toolbar>
     </AppBar>

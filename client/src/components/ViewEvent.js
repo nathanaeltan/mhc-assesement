@@ -33,7 +33,6 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
     vendor_name,
     company_name,
     status,
-    remarks,
     date,
     proposed_dates;
 
@@ -43,7 +42,6 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
     vendor_name = event.vendor_name;
     company_name = event.company_name;
     status = event.status;
-    remarks = event.remarks;
     date = event.date;
     proposed_dates = event.proposed_dates;
   }
@@ -94,7 +92,7 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary" autoFocus>
-                Agree
+                Close
               </Button>
             </DialogActions>
           </Dialog>
