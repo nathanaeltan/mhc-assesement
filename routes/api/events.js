@@ -182,10 +182,30 @@ router.put("/status/:id", auth, async (req, res) => {
     }
     event.status = !event.status;
     await event.save();
-    res.json(event);
+    const events = await Event.find({ vendor: req.user.id }).sort({ date: -1 });
+    res.json(events);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("SERVER ERROR");
+    res.status(500).json({ msg: "Error" });
   }
 });
+
+// Confirm a date
+router.put("/date/:id", auth, async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (event.vendor.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+
+    event.confirmed_date = req.body.confirmed_date;
+    await event.save();
+    const events = await Event.find({ vendor: req.user.id }).sort({ date: -1 });
+    res.json(events);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: "Error" });
+  }
+});
+
 module.exports = router;

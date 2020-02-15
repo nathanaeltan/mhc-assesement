@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -7,17 +7,22 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
-import { getEvent } from "../actions/event";
+import { getEvent, toggleApproval } from "../actions/event";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
-
-const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
-  useEffect(() => {
-    getEvent(eventID);
-  }, [getEvent]);
-
+import { bindActionCreators } from "redux";
+import green from "@material-ui/core/colors/green";
+import DateSelect from "./DateSelect";
+const ViewEvent = ({
+  eventID,
+  getEvent,
+  toggleApproval,
+  event: { event, loading },
+  user
+}) => {
   const [open, setOpen] = React.useState(false);
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const handleClickOpen = e => {
@@ -26,6 +31,10 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
   };
 
   const handleClose = () => {
+    setOpen(false);
+  };
+  const handleApproval = e => {
+    toggleApproval(eventID);
     setOpen(false);
   };
   let event_name,
@@ -64,7 +73,9 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
             onClose={handleClose}
             aria-labelledby="responsive-dialog-title"
           >
-            <DialogTitle id="responsive-dialog-title">{event_name}</DialogTitle>
+            <DialogTitle id="responsive-dialog-title">
+              Event: {event_name}
+            </DialogTitle>
             <DialogContent>
               <DialogContentText>Location: {location}</DialogContentText>
               <DialogContentText>
@@ -82,14 +93,23 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
               </DialogContentText>
               <DialogContentText>Proposed Dates:</DialogContentText>
 
-              {proposed_dates.map(item => {
-                return (
-                  <DialogContentText>
-                    <Moment format="YYYY/MM/DD">{item}</Moment>
-                  </DialogContentText>
-                );
-              })}
+             
+                <DateSelect proposed_dates={proposed_dates} eventID={eventID} />
+             
             </DialogContent>
+            {user.vendor ? (
+              <DialogActions>
+                <Button
+                  onClick={e => handleApproval(e)}
+                  color="secondary"
+                  variant="contained"
+                  autoFocus
+                >
+                  {status ? "Deny" : "Approve"}
+                </Button>
+              </DialogActions>
+            ) : null}
+
             <DialogActions>
               <Button onClick={handleClose} color="primary" autoFocus>
                 Close
@@ -104,7 +124,9 @@ const ViewEvent = ({ eventID, getEvent, event: { event, loading }, user }) => {
 
 ViewEvent.propTypes = {
   getEvent: PropTypes.func.isRequired,
-  event: PropTypes.object.isRequired
+  toggleApproval: PropTypes.func.isRequired,
+  event: PropTypes.object.isRequired,
+  eventID: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -112,4 +134,11 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { getEvent })(ViewEvent);
+const matchDispatchToProps = dispatch => {
+  return bindActionCreators(
+    { getEvent: getEvent, toggleApproval: toggleApproval },
+    dispatch
+  );
+};
+
+export default connect(mapStateToProps, matchDispatchToProps)(ViewEvent);

@@ -1,4 +1,11 @@
-import { GET_EVENTS, EVENT_ERROR, GET_EVENT } from "../actions/types";
+import {
+  GET_EVENTS,
+  EVENT_ERROR,
+  GET_EVENT,
+  EVENT_APPROVAL,
+  GET_VENDOR_EVENTS,
+  CONFIRM_DATE
+} from "../actions/types";
 
 const initialState = {
   events: [],
@@ -12,6 +19,8 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case GET_EVENTS:
+    case GET_VENDOR_EVENTS:
+    case EVENT_APPROVAL:
       return {
         ...state,
         events: payload,
@@ -27,6 +36,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         error: payload,
+        loading: false
+      };
+    case CONFIRM_DATE:
+      return {
+        ...state,
+        event: { ...state.event, confirmed_date: payload },
         loading: false
       };
     default:

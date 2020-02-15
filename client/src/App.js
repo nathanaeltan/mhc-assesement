@@ -6,6 +6,8 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 // Components
 import Navbar from "./components/Navbar";
 import Events from "./components/Events"
+import VendorEvents from "./components/VendorEvents"
+
 // Pages
 import home from "./pages/home";
 import login from "./pages/login";
@@ -57,6 +59,7 @@ const App = () => {
                 <Route exact path="/signup" component={signup} />
                 {/* <PrivateRoute Route exact path="/dashboard" component={dashboard} /> */}
                 <PrivateRoute Route exact path="/events" component={Events} />
+                <PrivateRoute Route exact path="/vendor" component={VendorEvents} />
               </Switch>
             </div>
           </Router>

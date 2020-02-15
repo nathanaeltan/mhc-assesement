@@ -55,13 +55,14 @@ router.post(
           id: user.id
         }
       };
+      const vendor = user.vendor
       jwt.sign(
         payload,
         config.get("jwtSecret"),
         { expiresIn: 3600000000 },
         (err, token) => {
           if (err) throw error;
-          res.json({ token });
+          res.json({ token, vendor });
         }
       );
     } catch (err) {

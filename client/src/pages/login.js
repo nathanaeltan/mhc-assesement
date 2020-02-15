@@ -21,11 +21,12 @@ const styles = {
   }
 };
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, isAuthenticated, vendor }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+
   const { email, password } = formData;
   // const { classes } = this.props;
 
@@ -36,10 +37,11 @@ const Login = ({ login, isAuthenticated }) => {
     e.preventDefault();
     login(email, password);
   };
-
   // Redirect if logged in
-  if (isAuthenticated) {
+  if (isAuthenticated && !vendor) {
     return <Redirect to="/events" />;
+  } else if (isAuthenticated && vendor) {
+    return <Redirect to="/vendor" />;
   }
   return (
     <Grid container style={styles.form}>
@@ -86,11 +88,14 @@ const Login = ({ login, isAuthenticated }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  vendor: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
+  vendor: state.auth.vendor
 });
 
 export default connect(mapStateToProps, { login })(Login);

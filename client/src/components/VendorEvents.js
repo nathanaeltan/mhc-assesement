@@ -10,7 +10,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { getEvents } from "../actions/event";
+import { getVendorEvents } from "../actions/event";
 import ViewEvent from "./ViewEvent";
 import Moment from "react-moment";
 const useStyles = makeStyles({
@@ -26,18 +26,29 @@ function createData(
   status,
   date,
   _id,
-  company_name
+  company_name,
+  confirmed_date
 ) {
-  return { event_name, location, vendor_name, status, date, _id, company_name };
+  return {
+    event_name,
+    location,
+    vendor_name,
+    status,
+    date,
+    _id,
+    company_name,
+    confirmed_date
+  };
 }
 
-const Events = ({ getEvents, event: { events, loading }, user }) => {
+const Events = ({ getVendorEvents, event: { events, loading }, user }) => {
   useEffect(() => {
     setTimeout(() => {
-      getEvents();
+      getVendorEvents();
     }, 2000);
-  }, [getEvents]);
+  }, []);
   const classes = useStyles();
+
   const rows = events.map(event => {
     const {
       event_name,
@@ -46,7 +57,8 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
       status,
       date,
       _id,
-      company_name
+      company_name,
+      confirmed_date
     } = event;
     return createData(
       event_name,
@@ -55,13 +67,15 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
       status,
       date,
       _id,
-      company_name
+      company_name,
+      confirmed_date
     );
   });
   return loading ? (
     <Spinner />
   ) : (
     <Fragment>
+      <h1>VENDOR</h1>
       <TableContainer component={Paper}>
         <Table
           className={classes.table}
@@ -78,6 +92,7 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
               <TableCell>Approved </TableCell>
               <TableCell>Date Created</TableCell>
               <TableCell></TableCell>
+              <TableCell>Confirmed Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -104,6 +119,13 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
                 <TableCell>
                   <ViewEvent eventID={row._id} />
                 </TableCell>
+                <TableCell>
+                  {row.confirmed_date ? (
+                    <Moment format="DD/MM/YYYY">{row.confirmed_date}</Moment>
+                  ) : (
+                    ""
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -114,7 +136,7 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
 };
 
 Events.propTypes = {
-  getEvents: PropTypes.func.isRequired,
+  getVendorEvents: PropTypes.func.isRequired,
   event: PropTypes.object.isRequired
 };
 
@@ -123,4 +145,4 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { getEvents })(Events);
+export default connect(mapStateToProps, { getVendorEvents })(Events);
