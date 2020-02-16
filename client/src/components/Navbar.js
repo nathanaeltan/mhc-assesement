@@ -7,15 +7,42 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-const Navbar = ({ auth: { isAuthenticated, loading } }) => {
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import Fab from "@material-ui/core/Fab";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import AddEvent from "./AddEvent";
+const useStyles = makeStyles(theme => ({
+  fab: {
+    margin: theme.spacing(0),
+    backgroundColor: "#81c784",
+    height: "30px",
+    width: "40px"
+  }
+}));
+
+const Navbar = ({ auth: { isAuthenticated, loading, user } }) => {
+  const classes = useStyles();
   const authLinks = (
     <Fragment>
       <Button color="inherit" component={Link} to="/">
         Home
       </Button>
-      <Button color="inherit" component={Link} to="/events">
-        Dashboard
-      </Button>
+      {user !== null ? (
+        user.vendor ? (
+          <Button color="inherit" component={Link} to="/vendor">
+            Dashboard
+          </Button>
+        ) : (
+          <Fragment>
+            <Button color="inherit" component={Link} to="/events">
+              Dashboard
+            </Button>
+            <AddEvent />
+          </Fragment>
+        )
+      ) : null}
     </Fragment>
   );
 

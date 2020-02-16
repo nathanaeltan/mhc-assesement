@@ -5,6 +5,8 @@ const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const auth = require("../../middleware/auth");
+
 // @route   GET api/users
 // @desc    Register a User
 // @access  Private
@@ -65,5 +67,17 @@ router.post(
     }
   }
 );
+
+// Get all Vendors
+// api/users/vendors
+router.get("/vendors", auth, async (req, res) => {
+  try {
+    const vendors = await User.find({ vendor: true });
+    res.json(vendors);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("SERVER ERROR");
+  }
+});
 
 module.exports = router;

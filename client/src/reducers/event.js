@@ -4,14 +4,17 @@ import {
   GET_EVENT,
   EVENT_APPROVAL,
   GET_VENDOR_EVENTS,
-  CONFIRM_DATE
+  CONFIRM_DATE,
+  GET_VENDORS,
+  POST_EVENT
 } from "../actions/types";
 
 const initialState = {
   events: [],
   event: null,
   loading: true,
-  error: {}
+  error: {},
+  vendors: []
 };
 
 export default function(state = initialState, action) {
@@ -26,6 +29,18 @@ export default function(state = initialState, action) {
         events: payload,
         loading: false
       };
+    case GET_VENDORS:
+      return {
+        ...state,
+        vendors: payload,
+        loading: false
+      };
+    case POST_EVENT:
+        return {
+          ...state,
+          events: [payload, ...state.events],
+          loading: false
+        }
     case GET_EVENT:
       return {
         ...state,

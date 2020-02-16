@@ -62,7 +62,7 @@ const Events = ({ getEvents, event: { events, loading }, user }) => {
     <Spinner />
   ) : (
     <Fragment>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} style={{paddingTop: "40px"}}>
         <Table
           className={classes.table}
           size="small"

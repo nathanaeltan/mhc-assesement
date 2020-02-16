@@ -6,7 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import Moment from "react-moment";
-import { confirmDate } from "../actions/event";
+import { confirmDate, getVendorEvents } from "../actions/event";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
@@ -21,10 +21,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DateSelect = ({ proposed_dates, confirmDate, eventID }) => {
+const DateSelect = ({
+  proposed_dates,
+  confirmDate,
+  getVendorEvents,
+  eventID
+}) => {
   const classes = useStyles();
   const [formData, setFormData] = React.useState({
-    confirmedDate: ""
+    confirmed_date: ""
   });
 
   const [open, setOpen] = React.useState(false);
@@ -43,8 +48,11 @@ const DateSelect = ({ proposed_dates, confirmDate, eventID }) => {
   const handleSubmit = e => {
     e.preventDefault();
     confirmDate(formData, eventID);
+    setTimeout(() => {
+      getVendorEvents();
+    }, 2000);
   };
-  const { confirmedDate } = formData;
+  const { confirmed_date } = formData;
 
   return (
     <Fragment>
@@ -52,39 +60,38 @@ const DateSelect = ({ proposed_dates, confirmDate, eventID }) => {
         <InputLabel id="demo-controlled-open-select-label">
           Confirm Date
         </InputLabel>
-        
-          <Select
-            labelId="demo-controlled-open-select-label"
-            id="demo-controlled-open-select"
-            open={open}
-            onClose={handleClose}
-            onOpen={handleOpen}
-            name="confirmed_date"
-            onChange={e => handleChange(e)}
-            value={confirmedDate}
-          >
-            <MenuItem value="">
-              <em>Pick a Date</em>
-            </MenuItem>
-            {proposed_dates.map(item => {
-              return (
-                <MenuItem value={item} key={item}>
-                  <Moment format="DD/MM/YYYY">{item}</Moment>
-                </MenuItem>
-              );
-            })}
-          </Select>
-          <Button onClick={handleSubmit}>
-            Confirm
-          </Button>
-        
+
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          open={open}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          onChange={handleChange}
+          value={confirmed_date}
+          name="confirmed_date"
+        >
+          <MenuItem value="">
+            <em>Pick a Date</em>
+          </MenuItem>
+          {proposed_dates.map(item => {
+            return (
+              <MenuItem value={item} key={item}>
+                <Moment format="DD/MM/YYYY">{item}</Moment>
+              </MenuItem>
+            );
+          })}
+        </Select>
+        {}
+        <Button onClick={handleSubmit}>Confirm</Button>
       </FormControl>
     </Fragment>
   );
 };
 
 DateSelect.propTypes = {
-  confirmDate: PropTypes.func.isRequired
+  confirmDate: PropTypes.func.isRequired,
+  getVendorEvents: PropTypes.func.isRequired
 };
 // const mapStateToProps = state => ({
 //   event: state.event,
@@ -92,6 +99,9 @@ DateSelect.propTypes = {
 // });
 
 const matchDispatchToProps = dispatch => {
-  return bindActionCreators({ confirmDate: confirmDate }, dispatch);
+  return bindActionCreators(
+    { confirmDate: confirmDate, getVendorEvents: getVendorEvents },
+    dispatch
+  );
 };
 export default connect(null, matchDispatchToProps)(DateSelect);

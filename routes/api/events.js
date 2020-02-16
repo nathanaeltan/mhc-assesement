@@ -68,6 +68,8 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+
+
 // @route   GET api/events/vendor
 // @desc    See all Events from Vendor Side
 // @access  Private

@@ -12,3 +12,5 @@ export const GET_EVENT = "GET_EVENT";
 export const EVENT_ERROR = "EVENT_ERROR";
 export const EVENT_APPROVAL = "EVENT_APPROVAL";
 export const CONFIRM_DATE = "CONFIRM_DATE";
+export const GET_VENDORS = "GET_VENDORS";
+export const POST_EVENT = "POST_EVENT";

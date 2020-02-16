@@ -6,7 +6,9 @@ import {
   GET_EVENT,
   EVENT_APPROVAL,
   GET_VENDOR_EVENTS,
-  CONFIRM_DATE
+  CONFIRM_DATE,
+  GET_VENDORS,
+  POST_EVENT
 } from "./types";
 
 // GET EVENTS
@@ -25,6 +27,42 @@ export const getEvents = () => async dispatch => {
     });
   }
 };
+
+// Create an Event
+export const createEvent = formData => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    const res = await axios.post("/api/events", formData, config);
+    dispatch({
+      type: POST_EVENT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response, status: err.response.status }
+    });
+  }
+};
+
+export const getVendors = () => async dispatch => {
+  try {
+    const res = await axios.get("/api/users/vendors")
+    dispatch({
+      type: GET_VENDORS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: EVENT_ERROR,
+      payload: { msg: err.response, status: err.response.status }
+    });
+  }
+}
 export const getVendorEvents = () => async dispatch => {
   try {
     const res = await axios.get("/api/events/vendor");
@@ -84,7 +122,7 @@ export const confirmDate = (formData, id) => async dispatch => {
       }
     };
     const res = await axios.put(`/api/events/date/${id}`, formData, config);
-    console.log(res.data)
+    console.log(res.data);
     dispatch({
       type: CONFIRM_DATE,
       payload: res.data

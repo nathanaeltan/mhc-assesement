@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
-import green from "@material-ui/core/colors/green";
 import DateSelect from "./DateSelect";
 const ViewEvent = ({
   eventID,
@@ -24,7 +23,7 @@ const ViewEvent = ({
   const [open, setOpen] = React.useState(false);
 
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const handleClickOpen = e => {
     setOpen(true);
     getEvent(eventID);
@@ -92,10 +91,22 @@ const ViewEvent = ({
                 Status: {status ? "Approved" : "Not Approved"}
               </DialogContentText>
               <DialogContentText>Proposed Dates:</DialogContentText>
-
-             
-                <DateSelect proposed_dates={proposed_dates} eventID={eventID} />
-             
+              {user !== null ? (
+                user.vendor ? (
+                  <DateSelect
+                    proposed_dates={proposed_dates}
+                    eventID={eventID}
+                  />
+                ) : (
+                  proposed_dates.map(item => {
+                    return (
+                      <DialogContentText key={item}>
+                        <Moment format="YYYY/MM/DD">{item}</Moment>
+                      </DialogContentText>
+                    );
+                  })
+                )
+              ) : null}
             </DialogContent>
             {user.vendor ? (
               <DialogActions>
