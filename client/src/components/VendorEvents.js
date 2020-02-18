@@ -46,6 +46,7 @@ const Events = ({ getVendorEvents, event: { events, loading }, user }) => {
     setTimeout(() => {
       getVendorEvents();
     }, 2000);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const classes = useStyles();
 

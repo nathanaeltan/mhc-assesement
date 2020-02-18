@@ -1,16 +1,9 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import withStyles from "@material-ui/core/styles/withStyles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
-import Spinner from "./Spinner";
 import AddIcon from "@material-ui/icons/Add";
-import CloseIcon from "@material-ui/icons/Close";
-import Grid from "@material-ui/core/Grid";
 import Fab from "@material-ui/core/Fab";
 import { connect } from "react-redux";
 import { createEvent, getVendors } from "../actions/event";
@@ -20,12 +13,6 @@ import Typography from "@material-ui/core/Typography";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -48,6 +35,10 @@ const styles = {
   },
   button: {
     marginTop: "30px"
+  },
+  dialog: {
+    padding: "50px",
+    textAlign: "center"
   }
 };
 const AddEvent = ({ createEvent, getVendors, vendors }) => {
@@ -79,14 +70,13 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
   };
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    
-  }
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
     createEvent(formData);
-    setFormData("")
-    handleClose()
+    setFormData("");
+    handleClose();
   };
 
   return (
@@ -101,15 +91,14 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
         onClose={handleClose}
         fullWidth
         maxWidth="sm"
-        className={classes.dialog}
+        style={styles.dialog}
       >
-        <Grid container style={styles.form}>
-          <Grid item sm />
-          <Grid item sm>
-            <Typography variant="h2" style={styles.pageTitle}>
+       
+          
+            <Typography variant="h4" style={styles.pageTitle}>
               Add an Event
             </Typography>
-            <form noValidate onSubmit={e => handleSubmit(e)}>
+            <form noValidate onSubmit={e => handleSubmit(e)} style={styles.dialog}>
               <TextField
                 id="event_name"
                 name="event_name"
@@ -155,7 +144,7 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
                   );
                 })}
               </Select>
-              {<br/>}
+              {<br />}
               <TextField
                 id="proposed_dates"
                 name="proposed_dates"
@@ -166,8 +155,7 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
                 onChange={e => onChange(e)}
                 fullWidth
                 helperText="Max 3 dates, dd/mm/yyyy seperated by comma"
-              />
-              {" "}
+              />{" "}
               <Button
                 type="submit"
                 variant="contained"
@@ -177,9 +165,8 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
                 Submit
               </Button>
             </form>
-          </Grid>
-          <Grid item sm />
-        </Grid>
+          
+       
       </Dialog>
     </Fragment>
   );
