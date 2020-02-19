@@ -33,10 +33,10 @@ Link : https://stark-peak-41407.herokuapp.com/
 # Vendor Dashboard
 ![ALT text](images/Vendor_Dashboard.png)
 ![ALT text](images/vendor_modal.png)
-![ALT text](images/dateselect.png)
+![ALT text](images/vendor_dateselect.png)
 
 # MongoDB collections
-![ALT text](events_mongodb.png)
+![ALT text](images/events_mongodb.png)
 ![ALT text](images/users_mongodb.png)
 
 # Example of Json object
