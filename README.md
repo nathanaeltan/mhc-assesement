@@ -1,5 +1,5 @@
 # mhc-assesement
-
+Link : https://stark-peak-41407.herokuapp.com/
 ## Technologies Used
 - MongoDB
 - Mongoose
@@ -23,7 +23,23 @@
 - run npm run dev
 
 ## Wireframes
+# Login Page
 ![ALT text](images/loginpage.png)
 
+# User dashboard
+![ALT text](images/user_dashboard.png)
+![ALT text](images/user_add_event.png)
+
+# Vendor Dashboard
+![ALT text](images/Vendor_Dashboard.png)
+![ALT text](images/vendor_modal.png)
+![ALT text](images/dateselect.png)
+
+# MongoDB collections
+![ALT text](events_mongodb.png)
+![ALT text](images/users_mongodb.png)
+
+# Example of Json object
+![ALT text](images/jsonexample.png)
 
 
