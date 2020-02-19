@@ -25,7 +25,8 @@ const DateSelect = ({
   proposed_dates,
   confirmDate,
   getVendorEvents,
-  eventID
+  eventID,
+  event: { event }
 }) => {
   const classes = useStyles();
   const [formData, setFormData] = React.useState({
@@ -48,9 +49,8 @@ const DateSelect = ({
   const handleSubmit = async e => {
     e.preventDefault();
     await confirmDate(formData, eventID);
-   
-     await getVendorEvents();
-    
+
+    await getVendorEvents();
   };
   const { confirmed_date } = formData;
 
@@ -82,8 +82,9 @@ const DateSelect = ({
             );
           })}
         </Select>
-        {}
-        <Button onClick={handleSubmit}>Confirm</Button>
+        {event.confirmed_date ? null : (
+          <Button onClick={handleSubmit}>Confirm</Button>
+        )}
       </FormControl>
     </Fragment>
   );
@@ -93,10 +94,9 @@ DateSelect.propTypes = {
   confirmDate: PropTypes.func.isRequired,
   getVendorEvents: PropTypes.func.isRequired
 };
-// const mapStateToProps = state => ({
-//   event: state.event,
-//   user: state.auth.user
-// });
+const mapStateToProps = state => ({
+  event: state.event
+});
 
 const matchDispatchToProps = dispatch => {
   return bindActionCreators(
@@ -104,4 +104,4 @@ const matchDispatchToProps = dispatch => {
     dispatch
   );
 };
-export default connect(null, matchDispatchToProps)(DateSelect);
+export default connect(mapStateToProps, matchDispatchToProps)(DateSelect);
