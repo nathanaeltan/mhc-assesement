@@ -42,4 +42,7 @@ Link : https://stark-peak-41407.herokuapp.com/
 # Example of Json object
 ![ALT text](images/jsonexample.png)
 
+# ERD
+![ALT text](images/ERD.png)
+
 
