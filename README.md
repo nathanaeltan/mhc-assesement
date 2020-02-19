@@ -16,3 +16,14 @@
 - Heroku (deployment)
 
 
+## Installation & Instructions
+- To run locally, clone the repo 
+- Ensure you have node.js installed, 
+- run npm install
+- run npm run dev
+
+## Wireframes
+![ALT text](images/loginpage.png)
+
+
+

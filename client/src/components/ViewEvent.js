@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import Moment from "react-moment";
 import { bindActionCreators } from "redux";
 import DateSelect from "./DateSelect";
+import Spinner from "./Spinner";
 const ViewEvent = ({
   eventID,
   getEvent,
@@ -54,7 +55,9 @@ const ViewEvent = ({
     proposed_dates = event.proposed_dates;
   }
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <Fragment>
       <div>
         <Button

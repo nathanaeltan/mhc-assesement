@@ -83,7 +83,7 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
     <Fragment>
       <Tooltip title="Add Event" aria-label="add">
         <Fab color="primary" className={classes.fab}>
-          <AddIcon onClick={handleOpen} />
+          <AddIcon onClick={e => handleOpen(e)} />
         </Fab>
       </Tooltip>
       <Dialog
@@ -93,80 +93,76 @@ const AddEvent = ({ createEvent, getVendors, vendors }) => {
         maxWidth="sm"
         style={styles.dialog}
       >
-       
-          
-            <Typography variant="h4" style={styles.pageTitle}>
-              Add an Event
-            </Typography>
-            <form noValidate onSubmit={e => handleSubmit(e)} style={styles.dialog}>
-              <TextField
-                id="event_name"
-                name="event_name"
-                type="event_name"
-                label="Event Name"
-                style={styles.textField}
-                value={event_name}
-                onChange={e => onChange(e)}
-                fullWidth
-              />
-              <TextField
-                id="location"
-                name="location"
-                type="location"
-                label="Location"
-                style={styles.textField}
-                value={location}
-                onChange={e => onChange(e)}
-                fullWidth
-              />
-              <InputLabel id="demo-controlled-open-select-label">
-                Pick a Vendor
-              </InputLabel>
-              <Select
-                labelId="demo-controlled-open-select-label"
-                id="demo-controlled-open-select"
-                open={vendorOpen}
-                onClose={handleVendorClose}
-                onOpen={handleVendorOpen}
-                onChange={onChange}
-                value={vendor}
-                name="vendor"
-                autoWidth
-              >
-                <MenuItem value="">
-                  <em>Pick a Vendor</em>
+        <Typography variant="h4" style={styles.pageTitle}>
+          Add an Event
+        </Typography>
+        <form noValidate onSubmit={e => handleSubmit(e)} style={styles.dialog}>
+          <TextField
+            id="event_name"
+            name="event_name"
+            type="event_name"
+            label="Event Name"
+            style={styles.textField}
+            value={event_name}
+            onChange={e => onChange(e)}
+            fullWidth
+          />
+          <TextField
+            id="location"
+            name="location"
+            type="location"
+            label="Location"
+            style={styles.textField}
+            value={location}
+            onChange={e => onChange(e)}
+            fullWidth
+          />
+          <InputLabel id="demo-controlled-open-select-label">
+            Pick a Vendor
+          </InputLabel>
+          <Select
+            labelId="demo-controlled-open-select-label"
+            id="demo-controlled-open-select"
+            open={vendorOpen}
+            onClose={handleVendorClose}
+            onOpen={handleVendorOpen}
+            onChange={e => onChange(e)}
+            value={vendor}
+            name="vendor"
+            autoWidth
+          >
+            <MenuItem value="">
+              <em>Pick a Vendor</em>
+            </MenuItem>
+            {vendors.map(item => {
+              return (
+                <MenuItem value={item._id} key={item._id}>
+                  {item.name}
                 </MenuItem>
-                {vendors.map(item => {
-                  return (
-                    <MenuItem value={item._id} key={item._id}>
-                      {item.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-              {<br />}
-              <TextField
-                id="proposed_dates"
-                name="proposed_dates"
-                type="proposed_dates"
-                label=" Proposed Dates"
-                style={styles.textField}
-                value={proposed_dates}
-                onChange={e => onChange(e)}
-                fullWidth
-                helperText="Max 3 dates, dd/mm/yyyy seperated by comma"
-              />{" "}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={styles.button}
-              >
-                Submit
-              </Button>
-            </form>
-          
-       
+              );
+            })}
+          </Select>
+          {<br />}
+          <TextField
+            id="proposed_dates"
+            name="proposed_dates"
+            type="proposed_dates"
+            label=" Proposed Dates"
+            style={styles.textField}
+            value={proposed_dates}
+            onChange={e => onChange(e)}
+            fullWidth
+            helperText="Max 3 dates, dd/mm/yyyy seperated by comma"
+          />{" "}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={styles.button}
+          >
+            Submit
+          </Button>
+        </form>
       </Dialog>
     </Fragment>
   );

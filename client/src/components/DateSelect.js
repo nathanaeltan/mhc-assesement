@@ -45,12 +45,12 @@ const DateSelect = ({
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    confirmDate(formData, eventID);
-    setTimeout(() => {
-      getVendorEvents();
-    }, 2000);
+    await confirmDate(formData, eventID);
+   
+     await getVendorEvents();
+    
   };
   const { confirmed_date } = formData;
 
